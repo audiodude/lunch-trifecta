@@ -1,0 +1,23 @@
+name: Validate foods.json
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate foods.json
+        run: |
+          if ! python3 -m json.tool foods.json > /dev/null 2>&1; then
+            echo "ERROR: foods.json is not valid JSON!"
+            exit 1
+          fi
+          echo "SUCCESS: foods.json is valid JSON"
